@@ -178,6 +178,8 @@ A shop wants to consult the stock of its products.
 - Show for each product: article number, name, price, and total stock value, in tabular form (use 'tabulate')
 - Create a separate function for eading data and showing the result (+/- IVO)
 
+##### Solution
+
 ```python
 import csv
 
@@ -311,7 +313,7 @@ Design a class for a bank account:
 - An amount higher than the limit cannot be withdrawn.
 - Create two accounts, make some  transactions (debit/credit) and print the closing balance.
 
-#### Solution: Bank Account
+##### Solution: Bank Account
 
 ![Alt text](image-1.png)
 
@@ -380,7 +382,7 @@ Karel Meenaerts: 567.44
 
 ![Alt text](image-2.png)
 
-#### Solution 1: Example class Car
+##### Solution 1: Example class Car
 
 ```python
 class Car:
@@ -394,7 +396,7 @@ class Car:
 ```
 - Attributes, getters, setters, and other methods are missing here
 
-#### Solution 2: Inheritance: Second-hand Dealer
+##### Solution 2: Inheritance: Second-hand Dealer
 
 ```python
 from abc import ABC # abstract class
@@ -462,7 +464,7 @@ jozef = StaffMember(departmentMKT, "Jozef", "Goossens")
 peter = StaffMember(departmentMKT, "Peter", "De Grootte")
 ```
 
-#### Explanation
+##### Explanation
 
 - A **link attribute** is a reference to the object or objects at the other side of the association --> enables navigation
   - Example: __department refers to the department of the staff member
@@ -528,7 +530,7 @@ jozef = StaffMember(departmentMKT, "Jozef", "Goosens")
 
 ![Alt text](image-7.png)
 
-#### Exercise: One-to-One Association
+#### Exercise P41: One-to-One Association
 
 ![Alt text](image-8.png)
 
@@ -536,6 +538,183 @@ jozef = StaffMember(departmentMKT, "Jozef", "Goosens")
 - The reference "company_car" in an "Employee" object can be empty
 - Association defines references --> link attributes not in UML
 - **Question**: write the Python code for this model
+
+```python
+class Employee:
+    def __init__(self, number, first_name, surname):
+        self.__number = number
+        self.__first_name = first_name
+        self.__surname = surname
+        #-------------------------------------------
+        self.__company_car = None # relation - link attribute
+        #-------------------------------------------
+
+    @property
+    def number(self):
+        return self.__number
+    
+    @property
+    def first_name(self):
+        return self.__first_name
+    
+    @property
+    def surname(self):
+        return self.__surname
+    
+    @first_name.setter
+    def first_name(self, first_name):
+        self.__first_name = first_name
+
+    @surname.setter
+    def surname(self, surname):
+        self.__surname = surname
+
+    @property
+    def naam(self):
+        return self.__first_name + " " + self.__surname
+
+    #-----------------------------------------------------
+    @property # Association management methods
+    def company_car(self):
+        return self.company_car
+    
+    @company_car.setter # Association management methods
+    def company_car(self, company_car):
+        self.__company_car = company_car
+    #-----------------------------------------------------
+
+class CompanyCar:
+    def __init__(self, registration, license_plate, employee):
+        self.__registration = registration
+        self.__license_plate = license_plate
+        #-------------------------------------------
+        self.__employee = employee # relation - Link attribute
+        employee.company_car = self # relation - Link attribute (set value)
+        #-------------------------------------------
+
+    @property
+    def registration(self):
+        return self.__registration
+    
+    @property
+    def license_plate(self):
+        return self.__license_plate
+    
+    @license_plate.setter
+    def license_plate(self, new_license_plate):
+        self.__license_plate = new_license_plate
+
+    #-----------------------------------------------------
+    @property # Association management methods
+    def employee(self):
+        return self.__employee
+    
+    @employee.setter # Association management methods
+    def employee(self, employee):
+        self.__employee = employee
+        employee.company_car = self
+    #-----------------------------------------------------
+```
+
+##### Remark
+
+- The **link attribute** is immediately registered via the constructor. Why? A company car is this universe of discussion is *always* assigned to an employee
+- The **association management method** ```def company(self, company_car)``` allows the assignment of another company car to an employee
+
+#### Exercise P45: One-to-many association: Personnel (UML) - Bidirectional associations
+
+![alt text](image-9.png)
+
+```python
+import models_da
+
+class Employee:
+    def __init__(self, number, first_name, surname, birth_date, department): # department: call by object reference
+        self.__number = number
+        self.__first_name = first_name
+        self.__surname = surname
+        self.__birth_date = birth_date
+        #-------------------------------------------
+        self.__department = department # relation - link attribute
+        #-------------------------------------------
+
+    @property
+    def number(self):
+        return self.__number
+    
+    @property
+    def first_name(self):
+        return self.__first_name
+    
+    @property
+    def surname(self):
+        return self.__surname
+    
+    @property
+    def birth_date(self):
+        return self.__birth_date
+
+    @first_name.setter
+    def first_name(self, first_name):
+        self.__first_name = first_name
+
+    @surname.setter
+    def surname(self, surname):
+        self.__surname = surname
+
+    @birth_date.setter
+    def birth_date(self, birth_date):
+        self.__birth_date = birth_date
+
+     #-----------------------------------------------------
+    @property # Association management methods
+    def department(self):
+        return self.__department
+    
+    @department.setter # Association management methods
+    def department(self, department):
+        self.__department = department
+     #-----------------------------------------------------
+
+class Department:
+    def __init__(self, number, name):
+        self.__number = number
+        self.__name = name
+        #-------------------------------------------
+        self.__employees = None # relation - link attribute
+        #-------------------------------------------
+
+    @property
+    def number(self):
+        return self.__number
+    
+    @property
+    def name(self):
+        return self.__name
+    
+    @name.setter
+    def name(self, name):
+        self.__name = name
+
+     #-Lazy loading----------------------------------------------------
+    @property # Association management methods
+    def employees(self):
+        if self.__employees is None:
+            self.employees = models_da.EmployeeDA().find_by_department(self)
+    
+    def add_employee(self, employee): # Association management methods
+        self.__employees.append(employee)
+
+    def remove_employee(self, employee): # Association management methods
+        self.__employees.remove(employee)
+     #-----------------------------------------------------
+```
+
+#### Exercise P48: Many-to-many associations: films (UML)
+
+![alt text](image-10.png)
+
+
 
 
 
