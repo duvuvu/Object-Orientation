@@ -129,7 +129,7 @@ for product in products:
 
 #### Getters and setters: example in UML
 
-![Alt text](image.png)
+![Alt text](figures/figure_1-getter-n-setter.png)
 
 #### Getters and setters: example P13 (Python way)
 
@@ -315,7 +315,7 @@ Design a class for a bank account:
 
 ##### Solution: Bank Account
 
-![Alt text](image-1.png)
+![Alt text](figures/figure_2-Excersise-Full-Object-orientation.png)
 
 ```python
 class Account:
@@ -380,7 +380,7 @@ Karel Meenaerts: 567.44
   - Ad a constructor. Those are not mentioned on the UML diagram for space saving reasons.
   - The superclass inherits from Python class 'ABC' of module 'abc'.
 
-![Alt text](image-2.png)
+![Alt text](figures/figure_3-Exercise-Inheritance.png)
 
 ##### Solution 1: Example class Car
 
@@ -431,14 +431,16 @@ class Truck(Vehicle):
   - has multiplicities
   - can have roles (optional)
 
-![Alt text](image-3.png)
+![Alt text](figures/figure_4-Associations.png)
 
-#### Example: Association - Python
+#### Example P32: Association - Python
 
 ```python
 class Department:
     def __init__(self, name):
-        self.members = [] # relation
+        #-Link attribute----------------------------
+        self.members = []
+        #-------------------------------------------
         self.name = name
     
     # getters and setters
@@ -451,8 +453,10 @@ class Department:
 
 class StaffMember:
     def __init__(self, department, first_name, surname):
-        self.__department = department # relation
-        self.__department.add_staff_member(self) # relation
+        #-Link attribute----------------------------
+        self.__department = department
+        self.__department.add_staff_member(self)
+        #-------------------------------------------
         self.__firstname = first_name
         self.__surname = surname
 
@@ -479,7 +483,7 @@ peter = StaffMember(departmentMKT, "Peter", "De Grootte")
 
 ![Alt text](image-4.png)
 
-#### Exercise: implement this in Python
+#### Exercise P35: implement this in Python
 
 ```python
 class Adress:
@@ -489,8 +493,10 @@ class Adress:
 
 class Department:
     def __init__(self, address, name):
-        self.menbers = [] # relation
-        self.__adrdress = address # relation
+        #-Link attribute----------------------------
+        self.menbers = []
+        self.__adrdress = address
+        #-------------------------------------------
         self.__name = name
     
     # getters and setters
@@ -503,8 +509,10 @@ class Department:
 
 class StaffMember:
     def __init__(self, department, first_name, surname):
-        self.__department = department # relation
-        self.__department.add_member(self) # relation
+        #-Link attribute----------------------------
+        self.__department = department
+        self.__department.add_member(self)
+        #-------------------------------------------
         self.__first_name = first_name
         self.__surname = surname
     
@@ -528,16 +536,18 @@ jozef = StaffMember(departmentMKT, "Jozef", "Goosens")
 
 #### Extended Example: Second-hand Dealer
 
-![Alt text](image-7.png)
+![Alt text](figures/figure_6-Association-Exetended-Example.png)
 
 #### Exercise P41: One-to-One Association
 
-![Alt text](image-8.png)
+![Alt text](figures/figure_7-Exercise-One-to-one-Associations.png)
 
 - Objects of both classes refer to an object of the other class (bidirectional navigability)
 - The reference "company_car" in an "Employee" object can be empty
 - Association defines references --> link attributes not in UML
 - **Question**: write the Python code for this model
+
+File: models.py
 
 ```python
 class Employee:
@@ -545,8 +555,8 @@ class Employee:
         self.__number = number
         self.__first_name = first_name
         self.__surname = surname
-        #-------------------------------------------
-        self.__company_car = None # relation - link attribute
+        #-Link attribute----------------------------
+        self.__company_car = None
         #-------------------------------------------
 
     @property
@@ -573,12 +583,12 @@ class Employee:
     def naam(self):
         return self.__first_name + " " + self.__surname
 
-    #-----------------------------------------------------
-    @property # Association management methods
+    #-Association management methods----------------------
+    @property
     def company_car(self):
         return self.company_car
     
-    @company_car.setter # Association management methods
+    @company_car.setter
     def company_car(self, company_car):
         self.__company_car = company_car
     #-----------------------------------------------------
@@ -587,9 +597,9 @@ class CompanyCar:
     def __init__(self, registration, license_plate, employee):
         self.__registration = registration
         self.__license_plate = license_plate
-        #-------------------------------------------
-        self.__employee = employee # relation - Link attribute
-        employee.company_car = self # relation - Link attribute (set value)
+        #-Link attribute----------------------------
+        self.__employee = employee
+        employee.company_car = self
         #-------------------------------------------
 
     @property
@@ -604,12 +614,12 @@ class CompanyCar:
     def license_plate(self, new_license_plate):
         self.__license_plate = new_license_plate
 
-    #-----------------------------------------------------
-    @property # Association management methods
+    #-Association management methods----------------------
+    @property
     def employee(self):
         return self.__employee
     
-    @employee.setter # Association management methods
+    @employee.setter
     def employee(self, employee):
         self.__employee = employee
         employee.company_car = self
@@ -623,9 +633,12 @@ class CompanyCar:
 
 #### Exercise P45: One-to-many association: Personnel (UML) - Bidirectional associations
 
-![alt text](image-9.png)
+![alt text](figures/figure_8-Exercise-One-to-many-Associations.png)
+
+File: models.py
 
 ```python
+# Department 1 -------> 0..n Employee
 import models_da
 
 class Employee:
@@ -634,8 +647,8 @@ class Employee:
         self.__first_name = first_name
         self.__surname = surname
         self.__birth_date = birth_date
-        #-------------------------------------------
-        self.__department = department # relation - link attribute
+        #-Link attribute----------------------------
+        self.__department = department
         #-------------------------------------------
 
     @property
@@ -666,22 +679,22 @@ class Employee:
     def birth_date(self, birth_date):
         self.__birth_date = birth_date
 
-     #-----------------------------------------------------
-    @property # Association management methods
+    #-Association management methods----------------------
+    @property
     def department(self):
         return self.__department
     
-    @department.setter # Association management methods
+    @department.setter
     def department(self, department):
         self.__department = department
-     #-----------------------------------------------------
+    #-----------------------------------------------------
 
 class Department:
     def __init__(self, number, name):
         self.__number = number
         self.__name = name
-        #-------------------------------------------
-        self.__employees = None # relation - link attribute
+        #-Link attribute----------------------------
+        self.__employees = None
         #-------------------------------------------
 
     @property
@@ -696,23 +709,124 @@ class Department:
     def name(self, name):
         self.__name = name
 
-     #-Lazy loading----------------------------------------------------
-    @property # Association management methods
+    #-Association management methods - Lazy loading-------
+    @property
     def employees(self):
         if self.__employees is None:
             self.employees = models_da.EmployeeDA().find_by_department(self)
     
-    def add_employee(self, employee): # Association management methods
+    def add_employee(self, employee):
         self.__employees.append(employee)
 
-    def remove_employee(self, employee): # Association management methods
+    def remove_employee(self, employee):
         self.__employees.remove(employee)
-     #-----------------------------------------------------
+    #-----------------------------------------------------
 ```
 
 #### Exercise P48: Many-to-many associations: films (UML)
 
-![alt text](image-10.png)
+![alt text](figures/figure_9-Exercise-Many-to-many-Associations.png)
+
+##### Solution:
+
+File: models.py
+
+```python
+import models_da
+
+class Film:
+    def __init__(self, eidr, title, year):
+        self.__eidr = eidr
+        self.__title = title
+        self.__year = year
+        #-Link attribute----------------------------
+        self.__actors = None
+        #-------------------------------------------
+    
+    @property
+    def eidr(self):
+        return self.__eidr
+    
+    @property
+    def title(self):
+        return self.__title
+    
+    @property
+    def year(self):
+        return self.__year
+    
+    #-Association management methods----------------------
+    @property 
+    def actors(self):
+        if self.__actors is None:
+            self.__actors = models_da.ActorDA().find_by_film(self)
+        return self.__actors
+    
+    def add_actor(self, actor): 
+        self.__actors[actor.id] = actor
+        actor.add_film(self) # Bidirectional creation
+    #-----------------------------------------------------
+
+
+class Actor:
+    def __init__(self, number, first_name, surname):
+        self.__number = number
+        self.__first_name = first_name
+        self.__surname = surname
+        #-Link attribute----------------------------
+        self.__films = None # Link attribute
+        #-------------------------------------------
+
+    @property
+    def number(self):
+        return self.__number
+    
+    @property
+    def first_name(self):
+        return self.__first_name
+    
+    @property
+    def surname(self):
+        return self.__surname
+    
+    #-Association management methods----------------------
+    @property
+    def films(self):
+        if self.__films is None:
+            self.__films = models_da.FilmDA().find_by_actor(self)
+        return self.__films
+    
+    def add_film(self, film):
+        self.__films[film.eidr] = film
+        film.add_actor(self) # Bidirectional creation
+    #-----------------------------------------------------
+```
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
