@@ -1,12 +1,12 @@
-# Employee 1 -------> 0..1 Company Car
+# Employee 1 <-------> 0..1 Company Car
 
 class Employee:
     def __init__(self, number, first_name, surname):
         self.__number = number
         self.__first_name = first_name
         self.__surname = surname
-        #-------------------------------------------
-        self.__company_car = None # relation - link attribute
+        #-Link attribute----------------------------
+        self.__company_car = None
         #-------------------------------------------
 
     @property
@@ -33,12 +33,12 @@ class Employee:
     def naam(self):
         return self.__first_name + " " + self.__surname
 
-    #-----------------------------------------------------
-    @property # Association management methods
+    #-Association management methods----------------------
+    @property
     def company_car(self):
         return self.company_car
     
-    @company_car.setter # Association management methods
+    @company_car.setter
     def company_car(self, company_car):
         self.__company_car = company_car
     #-----------------------------------------------------
@@ -47,9 +47,9 @@ class CompanyCar:
     def __init__(self, registration, license_plate, employee):
         self.__registration = registration
         self.__license_plate = license_plate
-        #-------------------------------------------
-        self.__employee = employee # relation - Link attribute
-        employee.company_car = self # relation - Link attribute (set value)
+        #-Link attribute----------------------------
+        self.__employee = employee
+        employee.company_car = self
         #-------------------------------------------
 
     @property
@@ -64,12 +64,12 @@ class CompanyCar:
     def license_plate(self, new_license_plate):
         self.__license_plate = new_license_plate
 
-    #-----------------------------------------------------
-    @property # Association management methods
+    #-Association management methods----------------------
+    @property
     def employee(self):
         return self.__employee
     
-    @employee.setter # Association management methods
+    @employee.setter
     def employee(self, employee):
         self.__employee = employee
         employee.company_car = self

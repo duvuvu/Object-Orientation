@@ -1,4 +1,4 @@
-# Department 1 -------> 0..n Employee
+# Department 1 <-------> 0..n Employee
 import models_da
 
 class Employee:
@@ -7,8 +7,8 @@ class Employee:
         self.__first_name = first_name
         self.__surname = surname
         self.__birth_date = birth_date
-        #-------------------------------------------
-        self.__department = department # relation - link attribute
+        #-Link attribute----------------------------
+        self.__department = department
         #-------------------------------------------
 
     @property
@@ -39,22 +39,22 @@ class Employee:
     def birth_date(self, birth_date):
         self.__birth_date = birth_date
 
-     #-----------------------------------------------------
-    @property # Association management methods
+    #-Association management methods----------------------
+    @property
     def department(self):
         return self.__department
     
-    @department.setter # Association management methods
+    @department.setter
     def department(self, department):
         self.__department = department
-     #-----------------------------------------------------
+    #-----------------------------------------------------
 
 class Department:
     def __init__(self, number, name):
         self.__number = number
         self.__name = name
-        #-------------------------------------------
-        self.__employees = None # relation - link attribute
+        #-Link attribute----------------------------
+        self.__employees = None
         #-------------------------------------------
 
     @property
@@ -69,15 +69,15 @@ class Department:
     def name(self, name):
         self.__name = name
 
-     #-Lazy loading----------------------------------------------------
-    @property # Association management methods
+    #-Association management methods - Lazy loading-------
+    @property
     def employees(self):
         if self.__employees is None:
             self.employees = models_da.EmployeeDA().find_by_department(self)
     
-    def add_employee(self, employee): # Association management methods
+    def add_employee(self, employee):
         self.__employees.append(employee)
 
-    def remove_employee(self, employee): # Association management methods
+    def remove_employee(self, employee):
         self.__employees.remove(employee)
-     #-----------------------------------------------------
+    #-----------------------------------------------------

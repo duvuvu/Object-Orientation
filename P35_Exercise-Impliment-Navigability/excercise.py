@@ -5,8 +5,10 @@ class Adress:
 
 class Department:
     def __init__(self, address, name):
-        self.menbers = [] # relation
-        self.__adrdress = address # relation
+        #-Link attribute----------------------------
+        self.menbers = []
+        self.__adrdress = address
+        #-------------------------------------------
         self.__name = name
     
     # getters and setters
@@ -19,8 +21,10 @@ class Department:
 
 class StaffMember:
     def __init__(self, department, first_name, surname):
-        self.__department = department # relation
-        self.__department.add_member(self) # relation
+        #-Link attribute----------------------------
+        self.__department = department
+        self.__department.add_member(self)
+        #-------------------------------------------
         self.__first_name = first_name
         self.__surname = surname
     
